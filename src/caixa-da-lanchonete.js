@@ -1,22 +1,16 @@
 class CaixaDaLanchonete {
     calcularValorDaCompra(metodoDePagamento, itens) {
+        return this.verificarTaxas(metodoDePagamento, itens);
+    }
 
-        const formaDePagamento = [
-            "dinheiro",
-            "debito",
-            "credito",
-        ];
+    verificarCarrinho(itens) {
+        if (!itens.length) {
+            return "Não há itens no carrinho de compra!";
+        } return "Há itens no carrinho de compras!";
+    }
 
-        // const itens = [
-        //     "cafe",
-        //     "chantily",
-        //     "suco",
-        //     "sanduiche",
-        //     "queijo",
-        //     "salgado",
-        //     "combo1",
-        //     "combo2",
-        // ];
+    verificarTaxas(metodoDePagamento, itens) {
+        let total = 0;
 
         const cardapio = {
             cafe: {
@@ -54,36 +48,29 @@ class CaixaDaLanchonete {
 
         }
 
-        // Cálculo do valor total dos itens com base no método de pagamento
-        for (let i = 0; i < itens.length; i++) {
-            var total = 0;
-            const item = itens[i];
-            if (item in cardapio) {
-                const valorItem = cardapio[item].valor;
+        itens.forEach(item => {
+            const desconto = 0.05;
+            const acrescimo = 0.03;
 
-                if (metodoDePagamento === "dinheiro") {
-                    total += valorItem * 0.95; // Aplicar desconto de 5% para pagamento em dinheiro
-                } else if (metodoDePagamento === "credito") {
-                    total += valorItem * 1.03; // Aplicar acréscimo de 3% para pagamento a crédito
-                } else {
-                    total += valorItem;
-                }
+            const [codigo, quantidade] = item.split(",");
+            const { descricao, valor } = cardapio[codigo];
+
+            const valorItem = quantidade * valor;
+            const valorDesconto = valorItem * desconto;
+            const valorAcrescimo = valorItem * acrescimo;
+
+            if (metodoDePagamento === "dinheiro") {
+                total += valorItem - valorDesconto; // Aplicar desconto de 5% para pagamento em dinheiro
+            } else if (metodoDePagamento === "credito") {
+                total += valorItem + valorAcrescimo; // Aplicar acréscimo de 3% para pagamento a crédito
+            } else {
+                total += valorItem;
             }
-        }
-        
-        // if (metodoDePagamento === "dinheiro") {
-        //     total *= 0.95; // Aplicar desconto de 5% para pagamento em dinheiro
-        // } else if (metodoDePagamento === "credito") {
-        //     total *= 1.03; // Aplicar acréscimo de 3% para pagamento a crédito
-        // }
 
-        return `R$ ${total.toFixed(2).replace('.', ',')}`;
-    }
-
-    verificarCarrinho(itens) {
-        if (!itens.length) {
-            return "Não há itens no carrinho de compra!";
-        } return "Há itens no carrinho de compras!";
+            
+            console.log(total);
+        });
+        return `R$ ${total.toLocaleString('pt-br',{minimumFractionDigits: 2})}`;
     }
 }
 

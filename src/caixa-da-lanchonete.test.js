@@ -16,7 +16,7 @@ describe('CaixaDaLanchonete', () => {
     ])('compra %p em %p deve resultar em %p', (_, formaDePagamento, resultadoEsperado, itens) =>
         validaTeste(formaDePagamento, resultadoEsperado, itens));
 
-    test.only.each([
+    test.each([
         ['dinheiro', 'R$ 2,85', ['cafe,1']],
         ['credito', 'R$ 3,09', ['cafe,1']],
         ['debito', 'R$ 3,00', ['cafe,1']],
